@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.odak.catalogservice.exception.DeserializationException;
 
 public class Deserialization {
 
@@ -22,7 +23,7 @@ public class Deserialization {
 			return objectMapper.readValue(resource, objectMapper.getTypeFactory()
 					.constructCollectionType(List.class, Class.forName(target.getName())));
 		} catch (IOException | ClassNotFoundException e) {
-			throw new RuntimeException(EXCEPTION_MESSAGE, e);
+			throw new DeserializationException(EXCEPTION_MESSAGE, e);
 		}
 	}
 }

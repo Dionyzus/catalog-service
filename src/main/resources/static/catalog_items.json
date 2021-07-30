@@ -1,6 +1,71 @@
 [
 	{
-		"name": "Lenovo gaming laptop",
+		"name": "Bosch drill",
+		"description": "The best bang for buck!",
+		"price": 800.50,
+		"images": [
+			"https://some-photo"
+		],
+		"categories": [
+			{
+				"name": "Gaming laptops"
+			}
+		]
+	},
+	{
+		"name": "Drill",
+		"description": "The best bang for buck!",
+		"price": 800.50,
+		"images": [
+			"https://some-photo"
+		],
+		"categories": [
+			{
+				"name": "Gaming laptops"
+			}
+		]
+	},
+	{
+		"name": "Mandrill monkey",
+		"description": "The best bang for buck!",
+		"price": 800.50,
+		"images": [
+			"https://some-photo"
+		],
+		"categories": [
+			{
+				"name": "Gaming laptops"
+			}
+		]
+	},
+	{
+		"name": "Drill for wood",
+		"description": "The best bang for buck!",
+		"price": 800.50,
+		"images": [
+			"https://some-photo"
+		],
+		"categories": [
+			{
+				"name": "Gaming laptops"
+			}
+		]
+	},
+	{
+		"name": "Drilling toy",
+		"description": "The best bang for buck!",
+		"price": 800.50,
+		"images": [
+			"https://some-photo"
+		],
+		"categories": [
+			{
+				"name": "Gaming laptops"
+			}
+		]
+	},
+	{
+		"name": "Some drill toy",
 		"description": "The best bang for buck!",
 		"price": 800.50,
 		"images": [
