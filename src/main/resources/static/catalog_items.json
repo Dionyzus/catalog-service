@@ -1,0 +1,15 @@
+[
+	{
+		"name": "Lenovo gaming laptop",
+		"description": "The best bang for buck!",
+		"price": 800.50,
+		"images": [
+			"https://some-photo"
+		],
+		"categories": [
+			{
+				"name": "Gaming laptops"
+			}
+		]
+	}
+]
