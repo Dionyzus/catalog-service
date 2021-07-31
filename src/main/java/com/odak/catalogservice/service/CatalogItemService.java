@@ -48,7 +48,7 @@ public class CatalogItemService {
 		}
 		if (!categoryRepository.getCategories().stream().anyMatch(catalogItem.getCategories()::contains)) {
 			throw new BadRequestException(
-					"Provided category records do not exist.\nView http://localhost:8080/api/v1/categories for available categories data");
+					"Provided category records do not exist. View http://localhost:8080/api/v1/categories for available categories data");
 		}
 
 		return catalogItemRepository.save(catalogItem);
