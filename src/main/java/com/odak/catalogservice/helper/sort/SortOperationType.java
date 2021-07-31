@@ -1,4 +1,4 @@
-package com.odak.catalogservice.helpers.sort;
+package com.odak.catalogservice.helper.sort;
 
 public enum SortOperationType {
 	ID("id"), NAME("name"), PRICE("price");

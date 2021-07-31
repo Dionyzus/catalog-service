@@ -1,4 +1,4 @@
-package com.odak.catalogservice.helpers.sort;
+package com.odak.catalogservice.helper.sort;
 
 public enum SortDirection {
 	ASC("asc"), DESC("desc");

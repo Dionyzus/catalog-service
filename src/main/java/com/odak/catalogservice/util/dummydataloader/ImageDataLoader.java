@@ -1,4 +1,4 @@
-package com.odak.catalogservice.utils.dummydataloader;
+package com.odak.catalogservice.util.dummydataloader;
 
 import java.net.URL;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.odak.catalogservice.model.Image;
 import com.odak.catalogservice.repository.ImageRepository;
-import com.odak.catalogservice.utils.jackson.Deserialization;
+import com.odak.catalogservice.util.jackson.Deserialization;
 
 public class ImageDataLoader {
 

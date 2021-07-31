@@ -1,4 +1,4 @@
-package com.odak.catalogservice.utils.jackson;
+package com.odak.catalogservice.util.jackson;
 
 import java.io.IOException;
 import java.net.URL;

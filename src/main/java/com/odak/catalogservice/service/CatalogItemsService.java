@@ -14,10 +14,10 @@ import org.springframework.data.domain.PageRequest;
 
 import com.odak.catalogservice.exception.BadRequestException;
 import com.odak.catalogservice.exception.ResourceNotFoundException;
-import com.odak.catalogservice.helpers.search.SearchOperationFactory;
-import com.odak.catalogservice.helpers.sort.ISortOperation;
-import com.odak.catalogservice.helpers.sort.SortOperationFactory;
-import com.odak.catalogservice.helpers.search.ISearchOperation;
+import com.odak.catalogservice.helper.search.ISearchOperation;
+import com.odak.catalogservice.helper.search.SearchOperationFactory;
+import com.odak.catalogservice.helper.sort.ISortOperation;
+import com.odak.catalogservice.helper.sort.SortOperationFactory;
 import com.odak.catalogservice.model.CatalogItem;
 import com.odak.catalogservice.repository.CatalogItemRepository;
 

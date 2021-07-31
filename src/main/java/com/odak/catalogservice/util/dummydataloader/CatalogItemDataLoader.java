@@ -1,4 +1,4 @@
-package com.odak.catalogservice.utils.dummydataloader;
+package com.odak.catalogservice.util.dummydataloader;
 
 import java.net.URL;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.odak.catalogservice.model.CatalogItem;
 import com.odak.catalogservice.repository.CatalogItemRepository;
-import com.odak.catalogservice.utils.jackson.Deserialization;
+import com.odak.catalogservice.util.jackson.Deserialization;
 
 @Component
 public class CatalogItemDataLoader {

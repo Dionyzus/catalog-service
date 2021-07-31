@@ -1,4 +1,4 @@
-package com.odak.catalogservice.helpers.search;
+package com.odak.catalogservice.helper.search;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.odak.catalogservice.helpers.search;
+package com.odak.catalogservice.helper.search;
 
 public enum SearchOperationType {
 	NAME("name"), TEXT("text"), CATEGORY("category");
