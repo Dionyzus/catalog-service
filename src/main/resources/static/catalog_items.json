@@ -1,5 +1,6 @@
 [
 	{
+		"id": "101",
 		"name": "Bosch drill",
 		"description": "The best bang for buck!",
 		"price": 800.50,
@@ -8,11 +9,13 @@
 		],
 		"categories": [
 			{
+				"id":"10",
 				"name": "Gaming laptops"
 			}
 		]
 	},
 	{
+		"id": "111",
 		"name": "This is not it",
 		"description": "drill",
 		"price": 800.50,
@@ -21,11 +24,13 @@
 		],
 		"categories": [
 			{
+				"id":"10",
 				"name": "Gaming laptops"
 			}
 		]
 	},
 	{
+		"id": "121",
 		"name": "Mandrill monkey",
 		"description": "The best bang for buck!",
 		"price": 800.50,
@@ -34,11 +39,13 @@
 		],
 		"categories": [
 			{
+				"id":"30",
 				"name": "Desktop computers"
 			}
 		]
 	},
 	{
+		"id": "131",
 		"name": "Drill for wood",
 		"description": "The best bang for buck!",
 		"price": 800.50,
@@ -47,11 +54,13 @@
 		],
 		"categories": [
 			{
+				"id": "10",
 				"name": "Gaming laptops"
 			}
 		]
 	},
 	{
+		"id": "141",
 		"name": "Drilling toy",
 		"description": "The best bang for buck!",
 		"price": 800.50,
@@ -60,14 +69,17 @@
 		],
 		"categories": [
 			{
+				"id":"30",
 				"name": "Desktop computers"
 			},
 			{
+				"id": "20",
 				"name": "Not driller"
 			}
 		]
 	},
 	{
+		"id": "151",
 		"name": "toy",
 		"description": "The best bang for buck!",
 		"price": 800.50,
@@ -76,9 +88,11 @@
 		],
 		"categories": [
 			{
+				"id": "10",
 				"name": "Gaming laptops"
 			},
 			{
+				"id": "20",
 				"name": "Not driller"
 			}
 		]

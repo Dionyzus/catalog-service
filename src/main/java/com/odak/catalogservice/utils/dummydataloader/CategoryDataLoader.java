@@ -22,7 +22,7 @@ public class CategoryDataLoader {
 		final List<Category> categories = Deserialization.deserialize(resource, Category.class);
 
 		return (args) -> {
-			categoryRepository.save(categories);
+			categoryRepository.saveMany(categories);
 		};
 	}
 }

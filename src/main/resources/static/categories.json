@@ -1,8 +1,14 @@
 [
     {
+	  "id": "10",
       "name": "Gaming laptops"
     }, 
     {
+	  "id": "30",
       "name": "Desktop computers"
+    },
+    {
+	  "id": "20",
+      "name": "Not driller"
     }
 ]

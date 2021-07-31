@@ -21,7 +21,7 @@ public class ImageRepository {
 		imageCollection.add(image);
 	}
 	
-	public void save(List<Image> images) {
+	public void saveMany(List<Image> images) {
 		imageCollection.addAll(images);
 	}
 }

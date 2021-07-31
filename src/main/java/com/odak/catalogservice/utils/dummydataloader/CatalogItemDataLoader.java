@@ -22,7 +22,7 @@ public class CatalogItemDataLoader {
 		final List<CatalogItem> catalogItems = Deserialization.deserialize(resource, CatalogItem.class);
 		
 		return (args) -> {
-			catalogItemRepository.save(catalogItems);
+			catalogItemRepository.saveMany(catalogItems);
 		};
 	}
 }

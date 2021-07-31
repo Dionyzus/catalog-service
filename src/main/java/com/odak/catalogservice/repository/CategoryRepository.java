@@ -30,7 +30,7 @@ public class CategoryRepository {
 		categoryCollection.add(category);
 	}
 	
-	public void save(List<Category> categories) {
+	public void saveMany(List<Category> categories) {
 		categoryCollection.addAll(categories);
 	}
 

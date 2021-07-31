@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import com.odak.catalogservice.repository.CatalogItemRepository;
 import com.odak.catalogservice.repository.CategoryRepository;
 import com.odak.catalogservice.repository.ImageRepository;
-import com.odak.catalogservice.services.SearchService;
+import com.odak.catalogservice.service.CatalogItemsService;
 
 @Configuration
 @ComponentScan("com.odak.repository")
@@ -29,7 +29,7 @@ public class Config {
 	}
 	
 	@Bean
-	public SearchService searchService() {
-		return new SearchService();
+	public CatalogItemsService searchService(CatalogItemRepository catalogItemRepository) {
+		return new CatalogItemsService(catalogItemRepository);
 	}
 }

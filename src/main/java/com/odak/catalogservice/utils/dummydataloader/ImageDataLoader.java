@@ -20,7 +20,7 @@ public class ImageDataLoader {
 		final List<Image> images = Deserialization.deserialize(resource, Image.class);
 		
 		return (args) -> {
-			imageRepository.save(images);
+			imageRepository.saveMany(images);
 		};
 	}
 }

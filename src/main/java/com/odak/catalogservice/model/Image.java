@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Image {
+	@JsonProperty("id")
+	private String id;
+	
 	@JsonProperty("name")
 	private String name;
 	

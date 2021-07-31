@@ -18,86 +18,75 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.odak.catalogservice.exception.ResourceNotFoundException;
 import com.odak.catalogservice.model.CatalogItem;
-import com.odak.catalogservice.repository.CatalogItemRepository;
-import com.odak.catalogservice.services.SearchService;
+import com.odak.catalogservice.service.CatalogItemsService;
 
 @RestController
 @RequestMapping("api/v1")
 public class CatalogItemController {
 
-	private CatalogItemRepository catalogItemRepository;
-	private SearchService searchService;
+	private CatalogItemsService catalogItemsService;
 
 	@Autowired
-	public CatalogItemController(CatalogItemRepository catalogItemRepository, SearchService searchService) {
-		this.catalogItemRepository = catalogItemRepository;
-		this.searchService = searchService;
+	public CatalogItemController(CatalogItemsService catalogItemsService) {
+		this.catalogItemsService = catalogItemsService;
 	}
 
 	@PostMapping("/catalog-items")
 	public ResponseEntity<CatalogItem> createCatalogItem(@Validated @RequestBody CatalogItem catalogItemDetails) {
-		CatalogItem catalogItem = catalogItemRepository.save(catalogItemDetails);
+		CatalogItem catalogItem = catalogItemsService.create(catalogItemDetails);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(catalogItem);
 	}
 
 	@GetMapping("/catalog-items")
-	public ResponseEntity<List<CatalogItem>> getAllCatalogItems() {
-		List<CatalogItem> allCatalogItems = catalogItemRepository.getAllCatalogItems();
+	public ResponseEntity<List<CatalogItem>> getCatalogItems() {
+		List<CatalogItem> catalogItems = catalogItemsService.getCatalogItems();
 
-		return ResponseEntity.ok(allCatalogItems);
+		return ResponseEntity.ok(catalogItems);
 	}
 
-	@GetMapping("/catalog-items/{name}")
-	public ResponseEntity<CatalogItem> getCatalogItemByName(@PathVariable(value = "name") String itemName)
-			throws ResourceNotFoundException {
-		
-		CatalogItem catalogItem = catalogItemRepository.getCatalogItemByName(itemName)
-				.orElseThrow(() -> new ResourceNotFoundException("Resource not found: " + itemName));
+	@GetMapping("/catalog-items/{id}")
+	public ResponseEntity<CatalogItem> getCatalogItemById(@PathVariable(value = "id") String itemId) throws ResourceNotFoundException {
+		CatalogItem catalogItem = catalogItemsService.getCatalogItemById(itemId);
 
 		return ResponseEntity.ok(catalogItem);
 	}
 	
 	@GetMapping("/catalog-items/search")
 	public ResponseEntity<List<CatalogItem>> findCatalogItemsByName(@RequestParam("name") String name) {
-		List<CatalogItem> catalogItems = searchService.searchByName(catalogItemRepository.getAllCatalogItems(), name);
+		List<CatalogItem> catalogItems = catalogItemsService.searchByName(name);
 		
 		return ResponseEntity.ok(catalogItems);
 	}
 	
 	@GetMapping("/catalog-items/text-search")
 	public ResponseEntity<List<CatalogItem>> findCatalogItemsText(@RequestParam("text") String text) {
-		List<CatalogItem> catalogItems = searchService.searchByText(catalogItemRepository.getAllCatalogItems(), text);
+		List<CatalogItem> catalogItems = catalogItemsService.searchByText(text);
 		
 		return ResponseEntity.ok(catalogItems);
 	}
 	
 	@GetMapping("/catalog-items/filter")
 	public ResponseEntity<List<CatalogItem>> filterCatalogItemsByCategory(@RequestParam("categories") List<String> categories) {
-		List<CatalogItem> catalogItems = searchService.searchByCategories(catalogItemRepository.getAllCatalogItems(), categories);
+		List<CatalogItem> catalogItems = catalogItemsService.searchByCategories(categories);
 		
 		return ResponseEntity.ok(catalogItems);
 	}
 
-	@PutMapping("/catalog-items/{name}")
-	public ResponseEntity<CatalogItem> updateCatalogItem(@PathVariable(value = "name") String itemName,
+	@PutMapping("/catalog-items/{id}")
+	public ResponseEntity<CatalogItem> updateCatalogItem(@PathVariable(value = "id") String itemId,
 			@RequestBody CatalogItem catalogItemDetails) throws ResourceNotFoundException {
 		
-		CatalogItem catalogItem = catalogItemRepository.getCatalogItemByName(itemName)
-				.orElseThrow(() -> new ResourceNotFoundException("Resource not found: " + itemName));
-
-		catalogItemRepository.update(catalogItem, catalogItemDetails);
+		CatalogItem catalogItem = catalogItemsService.update(itemId, catalogItemDetails);
 
 		return ResponseEntity.ok(catalogItem);
 	}
 
-	@DeleteMapping("/catalog-items/{name}")
-	public ResponseEntity<CatalogItem> deleteCatalogItem(@PathVariable(value = "name") String itemName)
+	@DeleteMapping("/catalog-items/{id}")
+	public ResponseEntity<CatalogItem> deleteCatalogItem(@PathVariable(value = "id") String itemId)
 			throws ResourceNotFoundException {
-		catalogItemRepository.getCatalogItemByName(itemName)
-				.orElseThrow(() -> new ResourceNotFoundException("Resource not found: " + itemName));
-
-		catalogItemRepository.deleteByName(itemName);
+		
+		catalogItemsService.delete(itemId);
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}

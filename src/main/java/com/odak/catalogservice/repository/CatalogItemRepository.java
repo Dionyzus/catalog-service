@@ -10,7 +10,7 @@ public class CatalogItemRepository {
 
 	public final List<CatalogItem> catalogItemCollection = new ArrayList<>();
 	
-	public List<CatalogItem> getAllCatalogItems() {
+	public List<CatalogItem> getCatalogItems() {
 		return catalogItemCollection;
 	}
 	
@@ -19,25 +19,27 @@ public class CatalogItemRepository {
 		return catalogItem;
 	}
 	
-	public void save(List<CatalogItem> catalogItems) {
+	public void saveMany(List<CatalogItem> catalogItems) {
 		catalogItemCollection.addAll(catalogItems);
 	}
 
-	public Optional<CatalogItem> getCatalogItemByName(String itemName) {
+	public Optional<CatalogItem> getCatalogItemById(String itemId) {
 		return catalogItemCollection.stream()
-				.filter(catalogItem -> itemName.equalsIgnoreCase(catalogItem.getName()))
+				.filter(catalogItem -> itemId.equals(catalogItem.getId()))
 				.findAny();
 	}
 
-	public void deleteByName(String itemName) {
-		catalogItemCollection.removeIf(catalogItem -> catalogItem.getName().equalsIgnoreCase(itemName));
+	public void delete(String itemId) {
+		catalogItemCollection.removeIf(catalogItem -> catalogItem.getId().equals(itemId));
 	}
 
-	public void update(CatalogItem catalogItem, CatalogItem catalogItemDetails) {
+	public CatalogItem update(CatalogItem catalogItem, CatalogItem catalogItemDetails) {
 		catalogItem.setName(catalogItemDetails.getName());
 		catalogItem.setDescription(catalogItemDetails.getDescription());
 		catalogItem.setPrice(catalogItemDetails.getPrice());
 		catalogItem.setImages(catalogItemDetails.getImages());
 		catalogItem.setCategories(catalogItemDetails.getCategories());
+		
+		return catalogItem;
 	}
 }
