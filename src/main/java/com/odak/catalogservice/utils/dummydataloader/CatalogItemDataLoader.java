@@ -14,10 +14,12 @@ import com.odak.catalogservice.utils.jackson.Deserialization;
 @Component
 public class CatalogItemDataLoader {
 
+	private static final String DATA_SOURCE = "static/catalog_items.json";
+	
 	@Bean
 	public CommandLineRunner loadCatalogItemData(CatalogItemRepository catalogItemRepository) {
 
-		URL resource = Thread.currentThread().getContextClassLoader().getResource("static/catalog_items.json");
+		URL resource = Thread.currentThread().getContextClassLoader().getResource(DATA_SOURCE);
 
 		final List<CatalogItem> catalogItems = Deserialization.deserialize(resource, CatalogItem.class);
 		

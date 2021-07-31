@@ -1,19 +1,30 @@
 package com.odak.catalogservice.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import com.odak.catalogservice.exception.ResourceNotFoundException;
 import com.odak.catalogservice.model.CatalogItem;
 import com.odak.catalogservice.repository.CatalogItemRepository;
+import com.odak.catalogservice.utils.sort.CatalogItemSorter;
 
 public class CatalogItemsService {
 
 	private CatalogItemRepository catalogItemRepository;
+
+	private static final Integer DEFAULT_PAGE_SIZE = 5;
+	private static final Integer DEFAULT_PAGE_NUMBER = 0;
+	
+	private static final String EXCEPTION_MESSAGE = "Resource not found: ";
 
 	@Autowired
 	public CatalogItemsService(CatalogItemRepository catalogItemRepository) {
@@ -30,23 +41,48 @@ public class CatalogItemsService {
 
 	public CatalogItem getCatalogItemById(String itemId) throws ResourceNotFoundException {
 		CatalogItem catalogItem = catalogItemRepository.getCatalogItemById(itemId)
-				.orElseThrow(() -> new ResourceNotFoundException("Resource not found: " + itemId));
+				.orElseThrow(() -> new ResourceNotFoundException(EXCEPTION_MESSAGE + itemId));
 
 		return catalogItem;
 	}
 
 	public CatalogItem update(String itemId, CatalogItem catalogItemDetails) throws ResourceNotFoundException {
 		CatalogItem catalogItem = catalogItemRepository.getCatalogItemById(itemId)
-				.orElseThrow(() -> new ResourceNotFoundException("Resource not found: " + itemId));
+				.orElseThrow(() -> new ResourceNotFoundException(EXCEPTION_MESSAGE + itemId));
 
 		return catalogItemRepository.update(catalogItem, catalogItemDetails);
 	}
 
 	public void delete(String itemId) throws ResourceNotFoundException {
 		catalogItemRepository.getCatalogItemById(itemId)
-				.orElseThrow(() -> new ResourceNotFoundException("Resource not found: " + itemId));
+				.orElseThrow(() -> new ResourceNotFoundException(EXCEPTION_MESSAGE + itemId));
 
 		catalogItemRepository.delete(itemId);
+	}
+
+	public Page<CatalogItem> query(HashMap<String, String> queryParams) {
+
+		String searchType = queryParams.get("type") != null ? queryParams.get("type") : "";
+		List<String> searchValues = queryParams.get("value") != null
+				? Arrays.asList(queryParams.get("value").split(","))
+				: new ArrayList<>();
+
+		Integer pageSize = queryParams.get("pageSize") != null ? Integer.valueOf(queryParams.get("pageSize"))
+				: DEFAULT_PAGE_SIZE;
+		Integer pageNumber = queryParams.get("pageNo") != null ? Integer.valueOf(queryParams.get("pageNo"))
+				: DEFAULT_PAGE_NUMBER;
+		String sortField = queryParams.get("sortBy") != null ? queryParams.get("sortBy") : "";
+		String sortDirection = queryParams.get("sortDir") != null ? queryParams.get("sortDir") : "";
+
+		if ("name".equals(searchType) && !searchValues.isEmpty()) {
+			return toPage(searchByName(searchValues.get(0)), pageSize, pageNumber, sortField, sortDirection);
+		} else if ("text".equals(searchType) && !searchValues.isEmpty()) {
+			return toPage(searchByText(searchValues.get(0)), pageSize, pageNumber, sortField, sortDirection);
+		} else if ("category".equals(searchType) && !searchValues.isEmpty()) {
+			return toPage(searchByCategories(searchValues), pageSize, pageNumber, sortField, sortDirection);
+		} else {
+			return toPage(getCatalogItems(), pageSize, pageNumber, sortField, sortDirection);
+		}
 	}
 
 	public List<CatalogItem> searchByName(String itemName) {
@@ -94,5 +130,19 @@ public class CatalogItemsService {
 				.filter(catalogItem -> pattern.matcher(catalogItem.getName().trim()).find()
 						|| pattern.matcher(catalogItem.getDescription().trim()).find())
 				.collect(Collectors.toList());
+	}
+
+	Page<CatalogItem> toPage(List<CatalogItem> catalogItems, Integer pageSize, Integer pageNumber, String sortField,
+			String sortDirection) {
+
+		int totalpages = catalogItems.size() / pageSize;
+
+		CatalogItemSorter.sort(catalogItems, sortField, sortDirection);
+		PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+
+		int max = pageNumber >= totalpages ? catalogItems.size() : pageSize * (pageNumber + 1);
+		int min = pageNumber > totalpages ? max : pageSize * pageNumber;
+
+		return new PageImpl<CatalogItem>(catalogItems.subList(min, max), pageable, catalogItems.size());
 	}
 }

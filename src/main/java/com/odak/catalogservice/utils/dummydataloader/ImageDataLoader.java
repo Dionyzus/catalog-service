@@ -12,10 +12,12 @@ import com.odak.catalogservice.utils.jackson.Deserialization;
 
 public class ImageDataLoader {
 
+	private static final String DATA_SOURCE = "static/images.json";
+	
 	@Bean
 	public CommandLineRunner loadImageData(ImageRepository imageRepository) {
 
-		URL resource = Thread.currentThread().getContextClassLoader().getResource("static/images.json");
+		URL resource = Thread.currentThread().getContextClassLoader().getResource(DATA_SOURCE);
 
 		final List<Image> images = Deserialization.deserialize(resource, Image.class);
 		

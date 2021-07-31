@@ -15,7 +15,7 @@
 		]
 	},
 	{
-		"id": "111",
+		"id": "121",
 		"name": "This is not it",
 		"description": "drill",
 		"price": 800.50,
@@ -30,7 +30,7 @@
 		]
 	},
 	{
-		"id": "121",
+		"id": "111",
 		"name": "Mandrill monkey",
 		"description": "The best bang for buck!",
 		"price": 800.50,
@@ -48,7 +48,7 @@
 		"id": "131",
 		"name": "Drill for wood",
 		"description": "The best bang for buck!",
-		"price": 800.50,
+		"price": 1000.50,
 		"images": [
 			"https://some-photo"
 		],
