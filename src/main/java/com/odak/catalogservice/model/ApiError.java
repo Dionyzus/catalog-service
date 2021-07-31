@@ -46,6 +46,14 @@ public class ApiError {
 		}
 		errors.add(error);
 	}
+	
+	public void addValidationError(List<ObjectError> globalErrors) {
+		globalErrors.forEach(this::addValidationError);
+	}
+	
+	public void addValidationErrors(List<FieldError> fieldErrors) {
+		fieldErrors.forEach(this::addValidationError);
+	}
 
 	private void addValidationError(String object, String field, Object rejectedValue, String message) {
 		addSubError(new ApiValidationError(object, field, rejectedValue, message));
@@ -60,15 +68,7 @@ public class ApiError {
 				fieldError.getDefaultMessage());
 	}
 
-	public void addValidationErrors(List<FieldError> fieldErrors) {
-		fieldErrors.forEach(this::addValidationError);
-	}
-
 	private void addValidationError(ObjectError objectError) {
 		this.addValidationError(objectError.getObjectName(), objectError.getDefaultMessage());
-	}
-
-	public void addValidationError(List<ObjectError> globalErrors) {
-		globalErrors.forEach(this::addValidationError);
 	}
 }
