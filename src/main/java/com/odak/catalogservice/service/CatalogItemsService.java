@@ -12,10 +12,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
+import com.odak.catalogservice.exception.BadRequestException;
 import com.odak.catalogservice.exception.ResourceNotFoundException;
+import com.odak.catalogservice.helpers.search.SearchOperationFactory;
+import com.odak.catalogservice.helpers.sort.ISortOperation;
+import com.odak.catalogservice.helpers.sort.SortOperationFactory;
+import com.odak.catalogservice.helpers.search.ISearchOperation;
 import com.odak.catalogservice.model.CatalogItem;
 import com.odak.catalogservice.repository.CatalogItemRepository;
-import com.odak.catalogservice.utils.sort.CatalogItemSorter;
 
 public class CatalogItemsService {
 
@@ -23,7 +27,7 @@ public class CatalogItemsService {
 
 	private static final Integer DEFAULT_PAGE_SIZE = 5;
 	private static final Integer DEFAULT_PAGE_NUMBER = 0;
-	
+
 	private static final String EXCEPTION_MESSAGE = "Resource not found: ";
 
 	@Autowired
@@ -60,7 +64,7 @@ public class CatalogItemsService {
 		catalogItemRepository.delete(itemId);
 	}
 
-	public Page<CatalogItem> query(HashMap<String, String> queryParams) {
+	public Page<CatalogItem> query(HashMap<String, String> queryParams) throws BadRequestException {
 
 		String searchType = queryParams.get("type") != null ? queryParams.get("type") : "";
 		List<String> searchValues = queryParams.get("value") != null
@@ -74,15 +78,13 @@ public class CatalogItemsService {
 		String sortField = queryParams.get("sortBy") != null ? queryParams.get("sortBy") : "";
 		String sortDirection = queryParams.get("sortDir") != null ? queryParams.get("sortDir") : "";
 
-		if ("name".equals(searchType) && !searchValues.isEmpty()) {
-			return toPage(searchByName(searchValues.get(0)), pageSize, pageNumber, sortField, sortDirection);
-		} else if ("text".equals(searchType) && !searchValues.isEmpty()) {
-			return toPage(searchByText(searchValues.get(0)), pageSize, pageNumber, sortField, sortDirection);
-		} else if ("category".equals(searchType) && !searchValues.isEmpty()) {
-			return toPage(searchByCategories(searchValues), pageSize, pageNumber, sortField, sortDirection);
-		} else {
-			return toPage(getCatalogItems(), pageSize, pageNumber, sortField, sortDirection);
-		}
+		ISearchOperation targetOperation = SearchOperationFactory.getOperation(searchType)
+				.orElseThrow(() -> new BadRequestException("Invalid query param provided: " + searchType));
+
+		List<CatalogItem> filteredCollection = targetOperation.search(catalogItemRepository.getCatalogItems(),
+				searchValues);
+
+		return toPage(filteredCollection, pageSize, pageNumber, sortField, sortDirection);
 	}
 
 	public List<CatalogItem> searchByName(String itemName) {
@@ -133,11 +135,15 @@ public class CatalogItemsService {
 	}
 
 	Page<CatalogItem> toPage(List<CatalogItem> catalogItems, Integer pageSize, Integer pageNumber, String sortField,
-			String sortDirection) {
+			String sortDirection) throws BadRequestException {
 
 		int totalpages = catalogItems.size() / pageSize;
 
-		CatalogItemSorter.sort(catalogItems, sortField, sortDirection);
+		ISortOperation targetOperation = SortOperationFactory.getOperation(sortField)
+				.orElseThrow(() -> new BadRequestException("Invalid sort field provided: " + sortField));
+
+		targetOperation.sort(catalogItems, sortDirection);
+
 		PageRequest pageable = PageRequest.of(pageNumber, pageSize);
 
 		int max = pageNumber >= totalpages ? catalogItems.size() : pageSize * (pageNumber + 1);

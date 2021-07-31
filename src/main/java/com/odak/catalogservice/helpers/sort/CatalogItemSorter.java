@@ -1,4 +1,4 @@
-package com.odak.catalogservice.utils.sort;
+package com.odak.catalogservice.helpers.sort;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,22 +12,14 @@ public class CatalogItemSorter {
 		throw new UnsupportedOperationException("Utils class instantiation not allowed.");
 	}
 
-	public static void sort(List<CatalogItem> catalogItems, String sortField, String sortDirection) {
+	public static void sort(List<CatalogItem> catalogItems, String sortDirection, Comparator<CatalogItem> comparator) {
 
-		if ("id".equalsIgnoreCase(sortField)) {
-			doSort(catalogItems, sortDirection, new IdComparator());
-		} else if ("name".equalsIgnoreCase(sortField)) {
-			doSort(catalogItems, sortDirection, new NameComparator());
-		} else if ("price".equalsIgnoreCase(sortField)) {
-			doSort(catalogItems, sortDirection, new PriceComparator());
-		}
-	}
+		if (SortDirection.DESC.toString().equalsIgnoreCase(sortDirection)) {
 
-	private static void doSort(List<CatalogItem> catalogItems, String sortDirection,
-			Comparator<CatalogItem> comparator) {
-		if ("desc".equalsIgnoreCase(sortDirection)) {
 			Collections.sort(catalogItems, Collections.reverseOrder(comparator));
-		} else if ("asc".equalsIgnoreCase(sortDirection)) {
+
+		} else if (SortDirection.ASC.toString().equalsIgnoreCase(sortDirection)) {
+
 			Collections.sort(catalogItems, comparator);
 		}
 	}

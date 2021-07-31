@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.odak.catalogservice.exception.BadRequestException;
 import com.odak.catalogservice.exception.ResourceNotFoundException;
 import com.odak.catalogservice.model.CatalogItem;
 import com.odak.catalogservice.service.CatalogItemsService;
@@ -41,7 +42,7 @@ public class CatalogItemController {
 	}
 
 	@GetMapping("/catalog-items")
-	public ResponseEntity<Page<CatalogItem>> getCatalogItems(@RequestParam HashMap<String, String> queryParams) {
+	public ResponseEntity<Page<CatalogItem>> getCatalogItems(@RequestParam HashMap<String, String> queryParams) throws BadRequestException {
 
 		Page<CatalogItem> catalogItems = catalogItemsService.query(queryParams);
 
