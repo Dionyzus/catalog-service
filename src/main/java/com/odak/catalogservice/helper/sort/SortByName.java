@@ -8,7 +8,7 @@ import com.odak.catalogservice.model.CatalogItem;
 public class SortByName implements ISortOperation {
 
 	@Override
-	public void sort(List<CatalogItem> catalogItemCollection, String sortDirection) {
-		CatalogItemSorter.sort(catalogItemCollection, sortDirection, new NameComparator());
+	public List<CatalogItem> sort(List<CatalogItem> catalogItemCollection, String sortDirection) {
+		return CatalogItemSorter.sort(catalogItemCollection, sortDirection, new NameComparator());
 	}
 }

@@ -20,31 +20,32 @@ import org.springframework.web.bind.annotation.RestController;
 import com.odak.catalogservice.exception.BadRequestException;
 import com.odak.catalogservice.exception.ResourceNotFoundException;
 import com.odak.catalogservice.model.CatalogItem;
-import com.odak.catalogservice.service.CatalogItemsService;
+import com.odak.catalogservice.service.CatalogItemService;
 
 @RestController
 @RequestMapping("api/v1")
 public class CatalogItemController {
 
-	private CatalogItemsService catalogItemsService;
+	private CatalogItemService catalogItemService;
 
 	@Autowired
-	public CatalogItemController(CatalogItemsService catalogItemsService) {
-		this.catalogItemsService = catalogItemsService;
+	public CatalogItemController(CatalogItemService catalogItemsService) {
+		this.catalogItemService = catalogItemsService;
 	}
 
 	@PostMapping("/catalog-items")
 	public ResponseEntity<CatalogItem> createCatalogItem(@Validated @RequestBody CatalogItem catalogItemDetails) {
 
-		CatalogItem catalogItem = catalogItemsService.create(catalogItemDetails);
+		CatalogItem catalogItem = catalogItemService.create(catalogItemDetails);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(catalogItem);
 	}
 
 	@GetMapping("/catalog-items")
-	public ResponseEntity<Page<CatalogItem>> getCatalogItems(@RequestParam HashMap<String, String> queryParams) throws BadRequestException {
+	public ResponseEntity<Page<CatalogItem>> getCatalogItems(@RequestParam HashMap<String, String> queryParams)
+			throws BadRequestException {
 
-		Page<CatalogItem> catalogItems = catalogItemsService.query(queryParams);
+		Page<CatalogItem> catalogItems = catalogItemService.query(queryParams);
 
 		return ResponseEntity.ok(catalogItems);
 	}
@@ -53,7 +54,7 @@ public class CatalogItemController {
 	public ResponseEntity<CatalogItem> getCatalogItemById(@PathVariable(value = "id") String itemId)
 			throws ResourceNotFoundException {
 
-		CatalogItem catalogItem = catalogItemsService.getCatalogItemById(itemId);
+		CatalogItem catalogItem = catalogItemService.getCatalogItemById(itemId);
 
 		return ResponseEntity.ok(catalogItem);
 	}
@@ -62,7 +63,7 @@ public class CatalogItemController {
 	public ResponseEntity<CatalogItem> updateCatalogItem(@PathVariable(value = "id") String itemId,
 			@RequestBody CatalogItem catalogItemDetails) throws ResourceNotFoundException {
 
-		CatalogItem catalogItem = catalogItemsService.update(itemId, catalogItemDetails);
+		CatalogItem catalogItem = catalogItemService.update(itemId, catalogItemDetails);
 
 		return ResponseEntity.ok(catalogItem);
 	}
@@ -71,7 +72,7 @@ public class CatalogItemController {
 	public ResponseEntity<CatalogItem> deleteCatalogItem(@PathVariable(value = "id") String itemId)
 			throws ResourceNotFoundException {
 
-		catalogItemsService.delete(itemId);
+		catalogItemService.delete(itemId);
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}

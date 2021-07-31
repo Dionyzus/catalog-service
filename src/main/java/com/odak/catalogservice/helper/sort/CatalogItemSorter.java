@@ -3,6 +3,7 @@ package com.odak.catalogservice.helper.sort;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.odak.catalogservice.model.CatalogItem;
 
@@ -12,15 +13,20 @@ public class CatalogItemSorter {
 		throw new UnsupportedOperationException("Utils class instantiation not allowed.");
 	}
 
-	public static void sort(List<CatalogItem> catalogItems, String sortDirection, Comparator<CatalogItem> comparator) {
+	public static List<CatalogItem> sort(List<CatalogItem> catalogItems, String sortDirection,
+			Comparator<CatalogItem> comparator) {
+
+		List<CatalogItem> sortedList = catalogItems.stream().collect(Collectors.toList());
 
 		if (SortDirection.DESC.toString().equalsIgnoreCase(sortDirection)) {
 
-			Collections.sort(catalogItems, Collections.reverseOrder(comparator));
+			Collections.sort(sortedList, Collections.reverseOrder(comparator));
+			return sortedList;
 
-		} else if (SortDirection.ASC.toString().equalsIgnoreCase(sortDirection)) {
+		} else {
 
-			Collections.sort(catalogItems, comparator);
+			Collections.sort(sortedList, comparator);
+			return sortedList;
 		}
 	}
 

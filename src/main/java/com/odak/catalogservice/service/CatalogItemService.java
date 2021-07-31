@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -20,23 +21,37 @@ import com.odak.catalogservice.helper.sort.ISortOperation;
 import com.odak.catalogservice.helper.sort.SortOperationFactory;
 import com.odak.catalogservice.model.CatalogItem;
 import com.odak.catalogservice.repository.CatalogItemRepository;
+import com.odak.catalogservice.repository.CategoryRepository;
 
-public class CatalogItemsService {
+public class CatalogItemService {
 
 	private CatalogItemRepository catalogItemRepository;
+	private CategoryRepository categoryRepository;
 
-	private static final Integer DEFAULT_PAGE_SIZE = 5;
-	private static final Integer DEFAULT_PAGE_NUMBER = 0;
+	private static final Integer DEFAULT_RECORDS_LIMIT = 5;
+	private static final Integer DEFAULT_PAGE_OFFSET = 0;
 
-	private static final String EXCEPTION_MESSAGE = "Resource not found: ";
+	private static final String EXCEPTION_MESSAGE = "Resource with given id not found: ";
 
 	@Autowired
-	public CatalogItemsService(CatalogItemRepository catalogItemRepository) {
+	public CatalogItemService(CatalogItemRepository catalogItemRepository, CategoryRepository categoryRepository) {
 		this.catalogItemRepository = catalogItemRepository;
+		this.categoryRepository = categoryRepository;
 	}
 
-	public CatalogItem create(CatalogItem catalogItemDetails) {
-		return catalogItemRepository.save(catalogItemDetails);
+	public CatalogItem create(CatalogItem catalogItem) throws BadRequestException {
+
+		Optional<CatalogItem> catalogItemById = catalogItemRepository.getCatalogItemById(catalogItem.getId());
+
+		if (catalogItemById.isPresent()) {
+			throw new BadRequestException("Record with given id already exists: " + catalogItem.getId());
+		}
+		if (!categoryRepository.getCategories().stream().anyMatch(catalogItem.getCategories()::contains)) {
+			throw new BadRequestException(
+					"Provided category records do not exist.\nView http://localhost:8080/api/v1/categories for available categories data");
+		}
+
+		return catalogItemRepository.save(catalogItem);
 	}
 
 	public List<CatalogItem> getCatalogItems() {
@@ -66,25 +81,34 @@ public class CatalogItemsService {
 
 	public Page<CatalogItem> query(HashMap<String, String> queryParams) throws BadRequestException {
 
+		if (queryParams.isEmpty()) {
+			return toPage(catalogItemRepository.getCatalogItems(), DEFAULT_RECORDS_LIMIT, DEFAULT_PAGE_OFFSET, "", "");
+		}
+
 		String searchType = queryParams.get("type") != null ? queryParams.get("type") : "";
+
 		List<String> searchValues = queryParams.get("value") != null
 				? Arrays.asList(queryParams.get("value").split(","))
 				: new ArrayList<>();
 
-		Integer pageSize = queryParams.get("pageSize") != null ? Integer.valueOf(queryParams.get("pageSize"))
-				: DEFAULT_PAGE_SIZE;
-		Integer pageNumber = queryParams.get("pageNo") != null ? Integer.valueOf(queryParams.get("pageNo"))
-				: DEFAULT_PAGE_NUMBER;
+		Integer limit = queryParams.get("limit") != null ? Integer.valueOf(queryParams.get("limit"))
+				: DEFAULT_RECORDS_LIMIT;
+		Integer offset = queryParams.get("offset") != null ? Integer.valueOf(queryParams.get("offset"))
+				: DEFAULT_PAGE_OFFSET;
+
 		String sortField = queryParams.get("sortBy") != null ? queryParams.get("sortBy") : "";
 		String sortDirection = queryParams.get("sortDir") != null ? queryParams.get("sortDir") : "";
 
-		ISearchOperation targetOperation = SearchOperationFactory.getOperation(searchType)
-				.orElseThrow(() -> new BadRequestException("Invalid query param provided: " + searchType));
+		List<CatalogItem> filteredCollection = new ArrayList<>();
+		if (searchType != "") {
+			ISearchOperation targetOperation = SearchOperationFactory.getOperation(searchType)
+					.orElseThrow(() -> new BadRequestException("Invalid query type provided: " + searchType));
 
-		List<CatalogItem> filteredCollection = targetOperation.search(catalogItemRepository.getCatalogItems(),
-				searchValues);
+			filteredCollection = targetOperation.search(catalogItemRepository.getCatalogItems(), searchValues);
+			return toPage(filteredCollection, limit, offset, sortField, sortDirection);
+		}
 
-		return toPage(filteredCollection, pageSize, pageNumber, sortField, sortDirection);
+		return toPage(catalogItemRepository.getCatalogItems(), limit, offset, sortField, sortDirection);
 	}
 
 	public List<CatalogItem> searchByName(String itemName) {
@@ -134,20 +158,24 @@ public class CatalogItemsService {
 				.collect(Collectors.toList());
 	}
 
-	Page<CatalogItem> toPage(List<CatalogItem> catalogItems, Integer pageSize, Integer pageNumber, String sortField,
+	Page<CatalogItem> toPage(List<CatalogItem> catalogItems, Integer limit, Integer offset, String sortField,
 			String sortDirection) throws BadRequestException {
 
-		int totalpages = catalogItems.size() / pageSize;
+		int totalpages = catalogItems.size() / limit;
 
-		ISortOperation targetOperation = SortOperationFactory.getOperation(sortField)
-				.orElseThrow(() -> new BadRequestException("Invalid sort field provided: " + sortField));
+		PageRequest pageable = PageRequest.of(offset, limit);
 
-		targetOperation.sort(catalogItems, sortDirection);
+		int max = offset >= totalpages ? catalogItems.size() : limit * (offset + 1);
+		int min = offset > totalpages ? max : limit * offset;
 
-		PageRequest pageable = PageRequest.of(pageNumber, pageSize);
+		List<CatalogItem> sortedCatalogItems = new ArrayList<>();
+		if (sortField != "") {
+			ISortOperation targetOperation = SortOperationFactory.getOperation(sortField)
+					.orElseThrow(() -> new BadRequestException("Invalid sort field provided: " + sortField));
 
-		int max = pageNumber >= totalpages ? catalogItems.size() : pageSize * (pageNumber + 1);
-		int min = pageNumber > totalpages ? max : pageSize * pageNumber;
+			sortedCatalogItems = targetOperation.sort(catalogItems, sortDirection);
+			return new PageImpl<CatalogItem>(sortedCatalogItems.subList(min, max), pageable, sortedCatalogItems.size());
+		}
 
 		return new PageImpl<CatalogItem>(catalogItems.subList(min, max), pageable, catalogItems.size());
 	}
