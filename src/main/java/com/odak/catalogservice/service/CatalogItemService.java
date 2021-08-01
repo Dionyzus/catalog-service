@@ -18,8 +18,8 @@ import com.odak.catalogservice.helper.search.SearchOperationFactory;
 import com.odak.catalogservice.helper.sort.ISortOperation;
 import com.odak.catalogservice.helper.sort.SortOperationFactory;
 import com.odak.catalogservice.model.CatalogItem;
-import com.odak.catalogservice.repository.CatalogItemRepository;
-import com.odak.catalogservice.repository.CategoryRepository;
+import com.odak.catalogservice.repository.catalogitem.CatalogItemRepository;
+import com.odak.catalogservice.repository.category.CategoryRepository;
 
 public class CatalogItemService {
 
@@ -39,12 +39,12 @@ public class CatalogItemService {
 
 	public CatalogItem create(CatalogItem catalogItem) throws BadRequestException {
 
-		Optional<CatalogItem> catalogItemById = catalogItemRepository.getCatalogItemById(catalogItem.getId());
+		Optional<CatalogItem> catalogItemById = catalogItemRepository.getById(catalogItem.getId());
 
 		if (catalogItemById.isPresent()) {
 			throw new BadRequestException("Record with given id already exists: " + catalogItem.getId());
 		}
-		if (!categoryRepository.getCategories().stream().anyMatch(catalogItem.getCategories()::contains)) {
+		if (!categoryRepository.getAll().stream().anyMatch(catalogItem.getCategories()::contains)) {
 			throw new BadRequestException(
 					"Provided category records do not exist. View http://localhost:8080/api/v1/categories for available categories data");
 		}
@@ -53,25 +53,25 @@ public class CatalogItemService {
 	}
 
 	public List<CatalogItem> getCatalogItems() {
-		return catalogItemRepository.getCatalogItems();
+		return catalogItemRepository.getAll();
 	}
 
 	public CatalogItem getCatalogItemById(String itemId) throws ResourceNotFoundException {
-		CatalogItem catalogItem = catalogItemRepository.getCatalogItemById(itemId)
+		CatalogItem catalogItem = catalogItemRepository.getById(itemId)
 				.orElseThrow(() -> new ResourceNotFoundException(EXCEPTION_MESSAGE + itemId));
 
 		return catalogItem;
 	}
 
 	public CatalogItem update(String itemId, CatalogItem catalogItemDetails) throws ResourceNotFoundException {
-		CatalogItem catalogItem = catalogItemRepository.getCatalogItemById(itemId)
+		CatalogItem catalogItem = catalogItemRepository.getById(itemId)
 				.orElseThrow(() -> new ResourceNotFoundException(EXCEPTION_MESSAGE + itemId));
 
 		return catalogItemRepository.update(catalogItem, catalogItemDetails);
 	}
 
 	public void delete(String itemId) throws ResourceNotFoundException {
-		catalogItemRepository.getCatalogItemById(itemId)
+		catalogItemRepository.getById(itemId)
 				.orElseThrow(() -> new ResourceNotFoundException(EXCEPTION_MESSAGE + itemId));
 
 		catalogItemRepository.delete(itemId);
@@ -80,7 +80,7 @@ public class CatalogItemService {
 	public Page<CatalogItem> query(HashMap<String, String> queryParams) throws BadRequestException {
 
 		if (queryParams.isEmpty()) {
-			return toPage(catalogItemRepository.getCatalogItems(), DEFAULT_RECORDS_LIMIT, DEFAULT_PAGE_OFFSET, "", "");
+			return toPage(catalogItemRepository.getAll(), DEFAULT_RECORDS_LIMIT, DEFAULT_PAGE_OFFSET, "", "");
 		}
 
 		String searchType = queryParams.get("type") != null ? queryParams.get("type") : "";
@@ -102,11 +102,11 @@ public class CatalogItemService {
 			ISearchOperation targetOperation = SearchOperationFactory.getOperation(searchType)
 					.orElseThrow(() -> new BadRequestException("Invalid query type provided: " + searchType));
 
-			filteredCollection = targetOperation.search(catalogItemRepository.getCatalogItems(), searchValues);
+			filteredCollection = targetOperation.search(catalogItemRepository.getAll(), searchValues);
 			return toPage(filteredCollection, limit, offset, sortField, sortDirection);
 		}
 
-		return toPage(catalogItemRepository.getCatalogItems(), limit, offset, sortField, sortDirection);
+		return toPage(catalogItemRepository.getAll(), limit, offset, sortField, sortDirection);
 	}
 
 	Page<CatalogItem> toPage(List<CatalogItem> catalogItems, Integer limit, Integer offset, String sortField,

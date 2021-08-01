@@ -4,14 +4,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import com.odak.catalogservice.repository.CatalogItemRepository;
-import com.odak.catalogservice.repository.CategoryRepository;
-import com.odak.catalogservice.repository.ImageRepository;
+import com.odak.catalogservice.repository.catalogitem.CatalogItemRepository;
+import com.odak.catalogservice.repository.category.CategoryRepository;
+import com.odak.catalogservice.repository.image.ImageRepository;
 import com.odak.catalogservice.service.CatalogItemService;
 import com.odak.catalogservice.service.CategoryService;
 
 @Configuration
-@ComponentScan("com.odak.repository")
+@ComponentScan("com.odak.catalogservice.repository")
 public class Config {
 
 	@Bean

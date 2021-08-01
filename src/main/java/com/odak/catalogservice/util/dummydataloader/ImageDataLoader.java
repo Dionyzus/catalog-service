@@ -7,7 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 
 import com.odak.catalogservice.model.Image;
-import com.odak.catalogservice.repository.ImageRepository;
+import com.odak.catalogservice.repository.image.ImageRepository;
 import com.odak.catalogservice.util.jackson.Deserialization;
 
 public class ImageDataLoader {

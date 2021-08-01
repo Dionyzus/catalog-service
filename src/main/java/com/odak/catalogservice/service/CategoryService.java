@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.odak.catalogservice.model.Category;
-import com.odak.catalogservice.repository.CategoryRepository;
+import com.odak.catalogservice.repository.category.CategoryRepository;
 
 public class CategoryService {
 
@@ -17,6 +17,6 @@ public class CategoryService {
 	}
 
 	public List<Category> getCategories() {
-		return categoryRepository.getCategories();
+		return categoryRepository.getAll();
 	}
 }

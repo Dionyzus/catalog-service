@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.odak.catalogservice.model.Category;
-import com.odak.catalogservice.repository.CategoryRepository;
+import com.odak.catalogservice.repository.category.CategoryRepository;
 import com.odak.catalogservice.util.jackson.Deserialization;
 
 @Component
