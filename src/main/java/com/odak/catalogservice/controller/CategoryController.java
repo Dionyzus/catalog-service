@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.odak.catalogservice.exception.BadRequestException;
@@ -23,7 +24,7 @@ public class CategoryController {
 		this.categoryService = catalogItemsService;
 	}
 
-	@GetMapping("/categories")
+	@RequestMapping(value = "/categories", method = RequestMethod.GET, produces = { "application/json" })
 	public ResponseEntity<List<Category>> getCategories() throws BadRequestException {
 
 		List<Category> categories = categoryService.getCategories();

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +34,8 @@ public class CatalogItemController {
 		this.catalogItemService = catalogItemsService;
 	}
 
-	@PostMapping("/catalog-items")
+	@RequestMapping(value = "/catalog-items", method = RequestMethod.POST, produces = {
+			"application/json" }, consumes = "application/json")
 	public ResponseEntity<CatalogItem> createCatalogItem(@Validated @RequestBody CatalogItem catalogItemDetails) {
 
 		CatalogItem catalogItem = catalogItemService.create(catalogItemDetails);
@@ -41,7 +43,7 @@ public class CatalogItemController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(catalogItem);
 	}
 
-	@GetMapping("/catalog-items")
+	@RequestMapping(value = "/catalog-items", method = RequestMethod.GET, produces = { "application/json" })
 	public ResponseEntity<Page<CatalogItem>> getCatalogItems(@RequestParam HashMap<String, String> queryParams)
 			throws BadRequestException {
 
@@ -50,7 +52,7 @@ public class CatalogItemController {
 		return ResponseEntity.ok(catalogItems);
 	}
 
-	@GetMapping("/catalog-items/{id}")
+	@RequestMapping(value = "/catalog-items/{id}", method = RequestMethod.GET, produces = { "application/json" })
 	public ResponseEntity<CatalogItem> getCatalogItemById(@PathVariable(value = "id") String itemId)
 			throws ResourceNotFoundException {
 
@@ -59,7 +61,8 @@ public class CatalogItemController {
 		return ResponseEntity.ok(catalogItem);
 	}
 
-	@PutMapping("/catalog-items/{id}")
+	@RequestMapping(value = "/catalog-items/{id}", method = RequestMethod.PUT, produces = {
+			"application/json" }, consumes = "application/json")
 	public ResponseEntity<CatalogItem> updateCatalogItem(@PathVariable(value = "id") String itemId,
 			@RequestBody CatalogItem catalogItemDetails) throws ResourceNotFoundException {
 
@@ -68,7 +71,7 @@ public class CatalogItemController {
 		return ResponseEntity.ok(catalogItem);
 	}
 
-	@DeleteMapping("/catalog-items/{id}")
+	@RequestMapping(value = "/catalog-items/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<CatalogItem> deleteCatalogItem(@PathVariable(value = "id") String itemId)
 			throws ResourceNotFoundException {
 
