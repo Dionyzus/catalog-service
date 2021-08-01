@@ -4,9 +4,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import com.odak.catalogservice.repository.catalogitem.CatalogItemRepository;
-import com.odak.catalogservice.repository.category.CategoryRepository;
-import com.odak.catalogservice.repository.image.ImageRepository;
+import com.odak.catalogservice.repository.catalogitem.CatalogItemRepositoryImpl;
+import com.odak.catalogservice.repository.category.CategoryRepositoryImpl;
+import com.odak.catalogservice.repository.image.ImageRepositoryImpl;
 import com.odak.catalogservice.service.CatalogItemService;
 import com.odak.catalogservice.service.CategoryService;
 
@@ -15,28 +15,28 @@ import com.odak.catalogservice.service.CategoryService;
 public class Config {
 
 	@Bean
-	public CategoryRepository categoryRepository() {
-		return new CategoryRepository();
+	public CategoryRepositoryImpl categoryRepository() {
+		return new CategoryRepositoryImpl();
 	}
 
 	@Bean
-	public ImageRepository imageRepository() {
-		return new ImageRepository();
+	public ImageRepositoryImpl imageRepository() {
+		return new ImageRepositoryImpl();
 	}
 
 	@Bean
-	public CatalogItemRepository catalogItemRepository() {
-		return new CatalogItemRepository();
+	public CatalogItemRepositoryImpl catalogItemRepository() {
+		return new CatalogItemRepositoryImpl();
 	}
 
 	@Bean
-	public CategoryService categoryService(CategoryRepository categoryRepository) {
+	public CategoryService categoryService(CategoryRepositoryImpl categoryRepository) {
 		return new CategoryService(categoryRepository);
 	}
 
 	@Bean
-	public CatalogItemService catalogItemService(CatalogItemRepository catalogItemRepository,
-			CategoryRepository categoryRepository) {
+	public CatalogItemService catalogItemService(CatalogItemRepositoryImpl catalogItemRepository,
+			CategoryRepositoryImpl categoryRepository) {
 		return new CatalogItemService(catalogItemRepository, categoryRepository);
 	}
 }

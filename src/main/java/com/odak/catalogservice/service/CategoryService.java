@@ -5,14 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.odak.catalogservice.model.Category;
-import com.odak.catalogservice.repository.category.CategoryRepository;
+import com.odak.catalogservice.repository.category.CategoryRepositoryImpl;
 
 public class CategoryService {
 
-	private CategoryRepository categoryRepository;
+	private CategoryRepositoryImpl categoryRepository;
 
 	@Autowired
-	public CategoryService(CategoryRepository categoryRepository) {
+	public CategoryService(CategoryRepositoryImpl categoryRepository) {
 		this.categoryRepository = categoryRepository;
 	}
 

@@ -13,18 +13,18 @@ import org.springframework.data.domain.PageRequest;
 
 import com.odak.catalogservice.exception.BadRequestException;
 import com.odak.catalogservice.exception.ResourceNotFoundException;
-import com.odak.catalogservice.helper.search.ISearchOperation;
+import com.odak.catalogservice.helper.search.SearchOperation;
 import com.odak.catalogservice.helper.search.SearchOperationFactory;
-import com.odak.catalogservice.helper.sort.ISortOperation;
+import com.odak.catalogservice.helper.sort.SortOperation;
 import com.odak.catalogservice.helper.sort.SortOperationFactory;
 import com.odak.catalogservice.model.CatalogItem;
-import com.odak.catalogservice.repository.catalogitem.CatalogItemRepository;
-import com.odak.catalogservice.repository.category.CategoryRepository;
+import com.odak.catalogservice.repository.catalogitem.CatalogItemRepositoryImpl;
+import com.odak.catalogservice.repository.category.CategoryRepositoryImpl;
 
 public class CatalogItemService {
 
-	private CatalogItemRepository catalogItemRepository;
-	private CategoryRepository categoryRepository;
+	private CatalogItemRepositoryImpl catalogItemRepository;
+	private CategoryRepositoryImpl categoryRepository;
 
 	private static final Integer DEFAULT_RECORDS_LIMIT = 5;
 	private static final Integer DEFAULT_PAGE_OFFSET = 0;
@@ -32,7 +32,7 @@ public class CatalogItemService {
 	private static final String EXCEPTION_MESSAGE = "Resource with given id not found: ";
 
 	@Autowired
-	public CatalogItemService(CatalogItemRepository catalogItemRepository, CategoryRepository categoryRepository) {
+	public CatalogItemService(CatalogItemRepositoryImpl catalogItemRepository, CategoryRepositoryImpl categoryRepository) {
 		this.catalogItemRepository = catalogItemRepository;
 		this.categoryRepository = categoryRepository;
 	}
@@ -99,7 +99,7 @@ public class CatalogItemService {
 
 		List<CatalogItem> filteredCollection = new ArrayList<>();
 		if (searchType != "") {
-			ISearchOperation targetOperation = SearchOperationFactory.getOperation(searchType)
+			SearchOperation targetOperation = SearchOperationFactory.getOperation(searchType)
 					.orElseThrow(() -> new BadRequestException("Invalid query type provided: " + searchType));
 
 			filteredCollection = targetOperation.search(catalogItemRepository.getAll(), searchValues);
@@ -121,7 +121,7 @@ public class CatalogItemService {
 
 		List<CatalogItem> sortedCatalogItems = new ArrayList<>();
 		if (sortField != "") {
-			ISortOperation targetOperation = SortOperationFactory.getOperation(sortField)
+			SortOperation targetOperation = SortOperationFactory.getOperation(sortField)
 					.orElseThrow(() -> new BadRequestException("Invalid sort field provided: " + sortField));
 
 			sortedCatalogItems = targetOperation.sort(catalogItems, sortDirection);

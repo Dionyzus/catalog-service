@@ -4,6 +4,6 @@ import java.util.List;
 
 import com.odak.catalogservice.model.CatalogItem;
 
-public interface ISortOperation {
+public interface SortOperation {
 	List<CatalogItem> sort(List<CatalogItem> catalogItemCollection, String sortDirection);
 }

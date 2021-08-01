@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.odak.catalogservice.model.Category;
-import com.odak.catalogservice.repository.category.CategoryRepository;
+import com.odak.catalogservice.repository.category.CategoryRepositoryImpl;
 import com.odak.catalogservice.util.jackson.Deserialization;
 
 @Component
@@ -17,7 +17,7 @@ public class CategoryDataLoader {
 	private static final String DATA_SOURCE = "static/categories.json";
 
 	@Bean
-	public CommandLineRunner loadCategoryData(CategoryRepository categoryRepository) {
+	public CommandLineRunner loadCategoryData(CategoryRepositoryImpl categoryRepository) {
 
 		URL resource = Thread.currentThread().getContextClassLoader().getResource(DATA_SOURCE);
 

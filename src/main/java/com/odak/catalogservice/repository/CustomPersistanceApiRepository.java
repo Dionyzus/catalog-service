@@ -3,7 +3,7 @@ package com.odak.catalogservice.repository;
 import java.util.List;
 import java.util.Optional;
 
-public interface IpaRepository<T> {
+public interface CustomPersistanceApiRepository<T> {
 
 	List<T> getAll();
 

@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import com.odak.catalogservice.model.CatalogItem;
 
-public class SearchByName implements ISearchOperation{
+public class SearchByName implements SearchOperation{
 
 	@Override
 	public List<CatalogItem> search(List<CatalogItem> catalogItemCollection, List<String> options) {

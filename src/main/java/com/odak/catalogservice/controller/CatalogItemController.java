@@ -40,7 +40,7 @@ public class CatalogItemController {
 	}
 
 	@RequestMapping(value = "/catalog-items", method = RequestMethod.GET, produces = { "application/json" })
-	public ResponseEntity<Page<CatalogItem>> getCatalogItems(@RequestParam HashMap<String, String> queryParams)
+	public ResponseEntity<Page<CatalogItem>> getCatalogItems(@RequestParam(required = false) HashMap<String, String> queryParams)
 			throws BadRequestException {
 
 		Page<CatalogItem> catalogItems = catalogItemService.query(queryParams);

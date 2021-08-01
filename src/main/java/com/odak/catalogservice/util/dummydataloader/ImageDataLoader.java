@@ -7,7 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 
 import com.odak.catalogservice.model.Image;
-import com.odak.catalogservice.repository.image.ImageRepository;
+import com.odak.catalogservice.repository.image.ImageRepositoryImpl;
 import com.odak.catalogservice.util.jackson.Deserialization;
 
 public class ImageDataLoader {
@@ -15,7 +15,7 @@ public class ImageDataLoader {
 	private static final String DATA_SOURCE = "static/images.json";
 	
 	@Bean
-	public CommandLineRunner loadImageData(ImageRepository imageRepository) {
+	public CommandLineRunner loadImageData(ImageRepositoryImpl imageRepository) {
 
 		URL resource = Thread.currentThread().getContextClassLoader().getResource(DATA_SOURCE);
 
