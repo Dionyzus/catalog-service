@@ -1,6 +1,7 @@
 package com.odak.catalogservice.helper.search;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,10 +10,11 @@ import com.odak.catalogservice.model.CatalogItem;
 public class SearchByCategory implements SearchOperation {
 
 	@Override
-	public List<CatalogItem> search(List<CatalogItem> catalogItemCollection, List<String> criteria) {
+	public List<CatalogItem> search(List<CatalogItem> catalogItemCollection, String criteria) {
 		List<CatalogItem> filteredCollection = new ArrayList<>();
 
-		List<String> lowerCasedCategories = criteria.stream().map(String::toLowerCase).collect(Collectors.toList());
+		List<String> categories = Arrays.asList(criteria.split(","));
+		List<String> lowerCasedCategories = categories.stream().map(String::toLowerCase).collect(Collectors.toList());
 
 		for (CatalogItem catalogItem : catalogItemCollection) {
 			boolean anyCategoryMatches = catalogItem.getCategories().stream()

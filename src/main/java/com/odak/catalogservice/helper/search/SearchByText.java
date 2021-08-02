@@ -9,9 +9,9 @@ import com.odak.catalogservice.model.CatalogItem;
 public class SearchByText implements SearchOperation {
 	
 	@Override
-	public List<CatalogItem> search(List<CatalogItem> catalogItemCollection, List<String> options) {
+	public List<CatalogItem> search(List<CatalogItem> catalogItemCollection, String text) {
 		StringBuilder regex = new StringBuilder(".*(");
-		regex.append(options.get(0));
+		regex.append(text);
 		regex.append(").*");
 
 		Pattern pattern = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);

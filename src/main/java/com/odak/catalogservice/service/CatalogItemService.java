@@ -1,7 +1,6 @@
 package com.odak.catalogservice.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 
 import com.odak.catalogservice.exception.BadRequestException;
 import com.odak.catalogservice.exception.ResourceNotFoundException;
+import com.odak.catalogservice.helper.query.Query;
+import com.odak.catalogservice.helper.query.Query.QueryConfiguration;
 import com.odak.catalogservice.helper.search.SearchOperation;
 import com.odak.catalogservice.helper.search.SearchOperationFactory;
 import com.odak.catalogservice.helper.sort.SortOperation;
@@ -30,9 +31,11 @@ public class CatalogItemService {
 	private static final Integer DEFAULT_PAGE_OFFSET = 0;
 
 	private static final String EXCEPTION_MESSAGE = "Resource with given id not found: ";
+	private static final String EXAMPLE_USAGE = "Usage: eq. type=name&value=drill";
 
 	@Autowired
-	public CatalogItemService(CatalogItemRepositoryImpl catalogItemRepository, CategoryRepositoryImpl categoryRepository) {
+	public CatalogItemService(CatalogItemRepositoryImpl catalogItemRepository,
+			CategoryRepositoryImpl categoryRepository) {
 		this.catalogItemRepository = catalogItemRepository;
 		this.categoryRepository = categoryRepository;
 	}
@@ -80,51 +83,56 @@ public class CatalogItemService {
 	public Page<CatalogItem> query(HashMap<String, String> queryParams) throws BadRequestException {
 
 		if (queryParams.isEmpty()) {
-			return toPage(catalogItemRepository.getAll(), DEFAULT_RECORDS_LIMIT, DEFAULT_PAGE_OFFSET, "", "");
+			return toPage(catalogItemRepository.getAll(), Query.QueryConfiguration.of());
 		}
 
-		String searchType = queryParams.get("type") != null ? queryParams.get("type") : "";
-
-		List<String> searchValues = queryParams.get("value") != null
-				? Arrays.asList(queryParams.get("value").split(","))
-				: new ArrayList<>();
-
-		Integer limit = queryParams.get("limit") != null ? Integer.valueOf(queryParams.get("limit"))
-				: DEFAULT_RECORDS_LIMIT;
-		Integer offset = queryParams.get("offset") != null ? Integer.valueOf(queryParams.get("offset"))
-				: DEFAULT_PAGE_OFFSET;
-
-		String sortField = queryParams.get("sortBy") != null ? queryParams.get("sortBy") : "";
-		String sortDirection = queryParams.get("sortDir") != null ? queryParams.get("sortDir") : "";
+		QueryConfiguration queryConfiguration = Query.QueryConfiguration.of(queryParams.get("type"),
+				queryParams.get("value"), tryParseInteger(queryParams.get("limit"), DEFAULT_RECORDS_LIMIT),
+				tryParseInteger(queryParams.get("offset"), DEFAULT_PAGE_OFFSET), queryParams.get("sortBy"),
+				queryParams.get("sortDir"));
 
 		List<CatalogItem> filteredCollection = new ArrayList<>();
-		if (searchType != "") {
-			SearchOperation targetOperation = SearchOperationFactory.getOperation(searchType)
-					.orElseThrow(() -> new BadRequestException("Invalid query type provided: " + searchType));
+		if (queryConfiguration.type != null) {
+			if (queryConfiguration.value == null) {
+				throw new BadRequestException("Query type exists, but no value provided. " + EXAMPLE_USAGE);
+			}
+			SearchOperation targetOperation = SearchOperationFactory.getOperation(queryConfiguration.type)
+					.orElseThrow(() -> new BadRequestException(
+							"Invalid query type provided: " + queryConfiguration.type + EXAMPLE_USAGE));
 
-			filteredCollection = targetOperation.search(catalogItemRepository.getAll(), searchValues);
-			return toPage(filteredCollection, limit, offset, sortField, sortDirection);
+			filteredCollection = targetOperation.search(catalogItemRepository.getAll(), queryConfiguration.value);
+			return toPage(filteredCollection, queryConfiguration);
 		}
 
-		return toPage(catalogItemRepository.getAll(), limit, offset, sortField, sortDirection);
+		return toPage(catalogItemRepository.getAll(), queryConfiguration);
 	}
 
-	Page<CatalogItem> toPage(List<CatalogItem> catalogItems, Integer limit, Integer offset, String sortField,
-			String sortDirection) throws BadRequestException {
+	private Integer tryParseInteger(String value, Integer defaultValue) {
+		try {
+			return Integer.parseInt(value);
+		} catch (NumberFormatException exception) {
+			// Missing logger
+			return defaultValue;
+		}
+	}
 
-		int totalpages = catalogItems.size() / limit;
+	Page<CatalogItem> toPage(List<CatalogItem> catalogItems, QueryConfiguration queryConfiguration)
+			throws BadRequestException {
 
-		PageRequest pageable = PageRequest.of(offset, limit);
+		int totalpages = catalogItems.size() / queryConfiguration.limit;
 
-		int max = offset >= totalpages ? catalogItems.size() : limit * (offset + 1);
-		int min = offset > totalpages ? max : limit * offset;
+		PageRequest pageable = PageRequest.of(queryConfiguration.offset, queryConfiguration.limit);
+
+		int max = queryConfiguration.offset >= totalpages ? catalogItems.size()
+				: queryConfiguration.limit * (queryConfiguration.offset + 1);
+		int min = queryConfiguration.offset > totalpages ? max : queryConfiguration.limit * queryConfiguration.offset;
 
 		List<CatalogItem> sortedCatalogItems = new ArrayList<>();
-		if (sortField != "") {
-			SortOperation targetOperation = SortOperationFactory.getOperation(sortField)
-					.orElseThrow(() -> new BadRequestException("Invalid sort field provided: " + sortField));
+		if (queryConfiguration.sortBy != null) {
+			SortOperation targetOperation = SortOperationFactory.getOperation(queryConfiguration.sortBy).orElseThrow(
+					() -> new BadRequestException("Invalid sort field provided: " + queryConfiguration.sortBy));
 
-			sortedCatalogItems = targetOperation.sort(catalogItems, sortDirection);
+			sortedCatalogItems = targetOperation.sort(catalogItems, queryConfiguration.sortDirection);
 			return new PageImpl<CatalogItem>(sortedCatalogItems.subList(min, max), pageable, sortedCatalogItems.size());
 		}
 
