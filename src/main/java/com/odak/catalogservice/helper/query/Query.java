@@ -48,15 +48,6 @@ public class Query implements IQuery {
 		return this.withQueryConfiguration(queryConfiguration.withSortDirection(sortDirection));
 	}
 
-	private Integer tryParseInteger(String value, Integer defaultValue) {
-		try {
-			return Integer.parseInt(value);
-		} catch (NumberFormatException exception) {
-			//Missing logger
-			return defaultValue;
-		}
-	}
-
 	@Data(staticConstructor = "of")
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)

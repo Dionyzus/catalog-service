@@ -2,98 +2,122 @@
 	{
 		"id": "101",
 		"name": "Bosch drill",
-		"description": "The best bang for buck!",
+		"description": "The only drill you will ever need.",
 		"price": 800.50,
 		"images": [
-			"https://some-photo"
+			"https://drill-bosch-drill"
 		],
 		"categories": [
 			{
-				"id":"10",
+				"id": "20",
+				"name": "Drill machines"
+			}
+		]
+	},
+	{
+		"id": "155",
+		"name": "Lenovo y520",
+		"description": "The best bang for buck! Gaming every day.. you know the drill.",
+		"price": 600.50,
+		"images": [
+			"https://some-photo-lenovo"
+		],
+		"categories": [
+			{
+				"id": "10",
 				"name": "Gaming laptops"
 			}
 		]
 	},
 	{
 		"id": "121",
-		"name": "This is not it",
-		"description": "drill",
+		"name": "Premade desktop computer, built by HP",
+		"description": "Great PC, for every-day use. Browse, code, communicate without any issues.",
 		"price": 800.50,
 		"images": [
-			"https://some-photo"
+			"https://hp-desktop-computer"
 		],
 		"categories": [
 			{
-				"id":"10",
-				"name": "Gaming laptops"
+				"id": "30",
+				"name": "Desktop computers"
 			}
 		]
 	},
 	{
 		"id": "111",
 		"name": "Mandrill monkey",
-		"description": "The best bang for buck!",
-		"price": 800.50,
+		"description": "Toy representation of a mandrill monkey",
+		"price": 10.50,
 		"images": [
-			"https://some-photo"
+			"https://mandrill-monkey"
 		],
 		"categories": [
 			{
-				"id":"30",
-				"name": "Desktop computers"
+				"id": "60",
+				"name": "Toys"
 			}
 		]
 	},
 	{
 		"id": "131",
 		"name": "Drill for wood",
-		"description": "The best bang for buck!",
-		"price": 1000.50,
+		"description": "Nice drilling machine for every-day use.",
+		"price": 400.25,
 		"images": [
-			"https://some-photo"
+			"https://proper-drill-machine"
 		],
 		"categories": [
 			{
-				"id": "10",
-				"name": "Gaming laptops"
+				"id": "20",
+				"name": "Drill machines"
 			}
 		]
 	},
 	{
 		"id": "141",
 		"name": "Drilling toy",
-		"description": "The best bang for buck!",
-		"price": 800.50,
+		"description": "This could be a drilling item, but in this case is just a toy.",
+		"price": 45.5,
 		"images": [
-			"https://some-photo"
+			"https://drill-machine-for-kids"
 		],
 		"categories": [
 			{
-				"id":"30",
-				"name": "Desktop computers"
-			},
-			{
-				"id": "20",
-				"name": "Not driller"
+				"id": "30",
+				"name": "Toys"
 			}
 		]
 	},
 	{
 		"id": "151",
-		"name": "toy",
-		"description": "The best bang for buck!",
-		"price": 800.50,
+		"name": "Stihl trimmer",
+		"description": "Kids wanna be gardeners.",
+		"price": 100.20,
 		"images": [
-			"https://some-photo"
+			"https://some-trimmer-toy-photo"
 		],
 		"categories": [
 			{
-				"id": "10",
-				"name": "Gaming laptops"
+				"id": "60",
+				"name": "Toys"
 			},
 			{
-				"id": "20",
-				"name": "Not driller"
+				"id": "50",
+				"name": "String trimmers"
+			}
+		]
+	},
+	{
+		"id": "1",
+		"name": "Test item",
+		"description": "Test description",
+		"price": 10.5,
+		"images": null,
+		"categories": [
+			{
+				"id": "40",
+				"name": "Test category"
 			}
 		]
 	}

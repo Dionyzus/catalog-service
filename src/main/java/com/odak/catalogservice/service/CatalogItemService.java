@@ -21,6 +21,7 @@ import com.odak.catalogservice.helper.sort.SortOperationFactory;
 import com.odak.catalogservice.model.CatalogItem;
 import com.odak.catalogservice.repository.catalogitem.CatalogItemRepositoryImpl;
 import com.odak.catalogservice.repository.category.CategoryRepositoryImpl;
+import com.odak.catalogservice.util.string.StringUtil;
 
 public class CatalogItemService {
 
@@ -92,8 +93,8 @@ public class CatalogItemService {
 				queryParams.get("sortDir"));
 
 		List<CatalogItem> filteredCollection = new ArrayList<>();
-		if (queryConfiguration.type != null) {
-			if (queryConfiguration.value == null) {
+		if (!StringUtil.isNullOrEmpty(queryConfiguration.type)) {
+			if (StringUtil.isNullOrEmpty(queryConfiguration.value)) {
 				throw new BadRequestException("Query type exists, but no value provided. " + EXAMPLE_USAGE);
 			}
 			SearchOperation targetOperation = SearchOperationFactory.getOperation(queryConfiguration.type)
@@ -128,7 +129,7 @@ public class CatalogItemService {
 		int min = queryConfiguration.offset > totalpages ? max : queryConfiguration.limit * queryConfiguration.offset;
 
 		List<CatalogItem> sortedCatalogItems = new ArrayList<>();
-		if (queryConfiguration.sortBy != null) {
+		if (!StringUtil.isNullOrEmpty(queryConfiguration.sortBy)) {
 			SortOperation targetOperation = SortOperationFactory.getOperation(queryConfiguration.sortBy).orElseThrow(
 					() -> new BadRequestException("Invalid sort field provided: " + queryConfiguration.sortBy));
 

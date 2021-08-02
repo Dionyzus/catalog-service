@@ -59,7 +59,7 @@ public class CatalogItemController {
 
 	@RequestMapping(value = "/catalog-items/{id}", method = RequestMethod.PUT, produces = {
 			"application/json" }, consumes = "application/json")
-	public ResponseEntity<CatalogItem> updateCatalogItem(@PathVariable(value = "id") String itemId,
+	public ResponseEntity<CatalogItem> updateCatalogItem(@Validated @PathVariable(value = "id") String itemId,
 			@RequestBody CatalogItem catalogItemDetails) throws ResourceNotFoundException {
 
 		CatalogItem catalogItem = catalogItemService.update(itemId, catalogItemDetails);

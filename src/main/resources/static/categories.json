@@ -1,14 +1,26 @@
 [
-    {
-	  "id": "10",
-      "name": "Gaming laptops"
-    }, 
-    {
-	  "id": "30",
-      "name": "Desktop computers"
-    },
-    {
-	  "id": "20",
-      "name": "Not driller"
-    }
+	{
+		"id": "10",
+		"name": "Gaming laptops"
+	},
+	{
+		"id": "30",
+		"name": "Desktop computers"
+	},
+	{
+		"id": "20",
+		"name": "Drill machines"
+	},
+	{
+		"id": "50",
+		"name": "String trimmers"
+	},
+	{
+		"id": "60",
+		"name": "Toys"
+	},
+	{
+		"id": "40",
+		"name": "Test category"
+	}
 ]
