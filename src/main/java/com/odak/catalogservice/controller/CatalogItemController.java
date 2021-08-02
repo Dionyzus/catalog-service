@@ -30,6 +30,13 @@ public class CatalogItemController {
 		this.catalogItemService = catalogItemsService;
 	}
 
+	/**
+	 * Creates new catalog item entry.
+	 *
+	 * @param catalogItemDetails - {@link CatalogItem} instance with required data
+	 *                           in JSON format.
+	 * @return {@link ResponseEntity} - JSON response containing newly created data.
+	 */
 	@RequestMapping(value = "/catalog-items", method = RequestMethod.POST, produces = {
 			"application/json" }, consumes = "application/json")
 	public ResponseEntity<CatalogItem> createCatalogItem(@Validated @RequestBody CatalogItem catalogItemDetails) {
@@ -39,15 +46,41 @@ public class CatalogItemController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(catalogItem);
 	}
 
+	/**
+	 * Gets list of {@link CatalogItem}. Available search types: name, text,
+	 * category; available sort fields: id, name, price.
+	 * 
+	 * Example usage:
+	 * http://localhost:8080/api/v1/catalog-items?limit=6&type=category&value=Desktop
+	 * computers,Gaming laptops&sortBy=price&sortDir=asc
+	 * http://localhost:8080/api/v1/catalog-items?type=text&value=drill&sortBy=name&sortDir=asc
+	 * http://localhost:8080/api/v1/catalog-items
+	 * 
+	 * @param queryParams - query parameters, available parameters: limit, offset,
+	 *                    sortBy, sortDir, type (search type), value (search value).
+	 *
+	 * @return {@link ResponseEntity} of {@link Page} type containing list of
+	 *         {@link CatalogItem}.
+	 * @throws BadRequestException - if provided parameters do not exist or
+	 *                             search/sort method does not exist.
+	 */
 	@RequestMapping(value = "/catalog-items", method = RequestMethod.GET, produces = { "application/json" })
-	public ResponseEntity<Page<CatalogItem>> getCatalogItems(@RequestParam(required = false) HashMap<String, String> queryParams)
-			throws BadRequestException {
+	public ResponseEntity<Page<CatalogItem>> getCatalogItems(
+			@RequestParam(required = false) HashMap<String, String> queryParams) throws BadRequestException {
 
 		Page<CatalogItem> catalogItems = catalogItemService.query(queryParams);
 
 		return ResponseEntity.ok(catalogItems);
 	}
 
+	/**
+	 * Gets catalog item if entry exists in collection.
+	 *
+	 * @param itemId - requested catalog item id.
+	 * @return {@link ResponseEntity} JSON response containing matched id data.
+	 * @throws ResourceNotFoundException - if item with provided id does not exist,
+	 *                                   {@link HttpStatus.NOT_FOUND} otherwise.
+	 */
 	@RequestMapping(value = "/catalog-items/{id}", method = RequestMethod.GET, produces = { "application/json" })
 	public ResponseEntity<CatalogItem> getCatalogItemById(@PathVariable(value = "id") String itemId)
 			throws ResourceNotFoundException {
@@ -57,6 +90,15 @@ public class CatalogItemController {
 		return ResponseEntity.ok(catalogItem);
 	}
 
+	/**
+	 * Updates catalog item if entry exists in collection.
+	 *
+	 * @param itemId - requested catalog item id
+	 * @param catalogItemDetails - JSON request body containing updated fields.
+	 * @return {@link ResponseEntity} - JSON containing updated catalog item,
+	 *         {@link HttpStatus.NOT_FOUND} otherwise.
+	 * @throws ResourceNotFoundException - if item with provided id does not exist.
+	 */
 	@RequestMapping(value = "/catalog-items/{id}", method = RequestMethod.PUT, produces = {
 			"application/json" }, consumes = "application/json")
 	public ResponseEntity<CatalogItem> updateCatalogItem(@Validated @PathVariable(value = "id") String itemId,
@@ -67,6 +109,14 @@ public class CatalogItemController {
 		return ResponseEntity.ok(catalogItem);
 	}
 
+	/**
+	 * Deletes catalog item if entry exists in collection.
+	 *
+	 * @param itemId - requested catalog item id
+	 * @return response {@link HttpStatus.NO_CONTENT} if action was successful, bad
+	 *         request otherwise.
+	 * @throws ResourceNotFoundException - if item with provided id does not exist.
+	 */
 	@RequestMapping(value = "/catalog-items/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<CatalogItem> deleteCatalogItem(@PathVariable(value = "id") String itemId)
 			throws ResourceNotFoundException {

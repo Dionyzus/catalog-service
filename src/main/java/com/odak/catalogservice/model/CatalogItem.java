@@ -12,6 +12,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Catalog item data representation object.
+ * @author ivano
+ *
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

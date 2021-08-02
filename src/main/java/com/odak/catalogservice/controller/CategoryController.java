@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.odak.catalogservice.exception.BadRequestException;
 import com.odak.catalogservice.model.Category;
 import com.odak.catalogservice.service.CategoryService;
 
@@ -23,8 +22,13 @@ public class CategoryController {
 		this.categoryService = catalogItemsService;
 	}
 
+	/**
+	 * Gets list of {@link Category} entries.
+	 *
+	 * @return {@link ResponseEntity} - JSON representation of available data.
+	 */
 	@RequestMapping(value = "/categories", method = RequestMethod.GET, produces = { "application/json" })
-	public ResponseEntity<List<Category>> getCategories() throws BadRequestException {
+	public ResponseEntity<List<Category>> getCategories() {
 
 		List<Category> categories = categoryService.getCategories();
 

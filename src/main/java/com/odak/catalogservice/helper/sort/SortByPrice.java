@@ -5,6 +5,11 @@ import java.util.List;
 import com.odak.catalogservice.helper.sort.CatalogItemSorter.PriceComparator;
 import com.odak.catalogservice.model.CatalogItem;
 
+/**
+ * Sorts collection by item price.
+ * @author ivano
+ *
+ */
 public class SortByPrice implements SortOperation {
 
 	@Override

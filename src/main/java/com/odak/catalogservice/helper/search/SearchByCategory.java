@@ -7,6 +7,12 @@ import java.util.stream.Collectors;
 
 import com.odak.catalogservice.model.CatalogItem;
 
+/**
+ * Performs query by category field or multiple category values.
+ *
+ * @author ivano
+ *
+ */
 public class SearchByCategory implements SearchOperation {
 
 	@Override

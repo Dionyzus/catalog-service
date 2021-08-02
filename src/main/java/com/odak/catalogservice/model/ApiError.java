@@ -10,6 +10,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data class defining API error description.
+ * @author ivano
+ *
+ */
 @Data
 public class ApiError {
 
@@ -23,17 +28,34 @@ public class ApiError {
 		timestamp = LocalDateTime.now();
 	}
 
+	/**
+	 * Instantiates new {@link ApiError} with provided HTTP status.
+	 * @param status - {@link HttpStatus}.
+	 */
 	public ApiError(HttpStatus status) {
 		this();
 		this.status = status;
 	}
 
+	/**
+	 * Instantiates new {@link ApiError} with provided HTTP status and exception.
+	 * 
+	 * @param status - {@link HttpStatus}.
+	 * @param ex - {@link Throwable} instance.
+	 */
 	public ApiError(HttpStatus status, Throwable ex) {
 		this();
 		this.status = status;
 		this.message = "Unexpected error";
 	}
 
+	/**
+	 * Instantiates new {@link ApiError} with provided HTTP status and exception.
+	 *
+	 * @param status - {@link HttpStatus}.
+	 * @param message - additional message value.
+	 * @param ex - {@link Throwable} instance.
+	 */
 	public ApiError(HttpStatus status, String message, Throwable ex) {
 		this();
 		this.status = status;
@@ -47,10 +69,20 @@ public class ApiError {
 		errors.add(error);
 	}
 	
+	/**
+	 * Adds to global errors list.
+	 *
+	 * @param globalErrors - list containing {@link ObjectError}.
+	 */
 	public void addValidationError(List<ObjectError> globalErrors) {
 		globalErrors.forEach(this::addValidationError);
 	}
 	
+	/**
+	 * Adds to field errors list.
+	 *
+	 * @param fieldErrors - list containing {@link FieldError}.
+	 */
 	public void addValidationErrors(List<FieldError> fieldErrors) {
 		fieldErrors.forEach(this::addValidationError);
 	}

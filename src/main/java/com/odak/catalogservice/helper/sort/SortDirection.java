@@ -1,5 +1,10 @@
 package com.odak.catalogservice.helper.sort;
 
+/**
+ * Available sort directions.
+ * @author ivano
+ *
+ */
 public enum SortDirection {
 	ASC("asc"), DESC("desc");
 

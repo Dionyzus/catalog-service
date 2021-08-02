@@ -6,6 +6,13 @@ import java.util.stream.Collectors;
 
 import com.odak.catalogservice.model.CatalogItem;
 
+/**
+ * Performs query by name and description field, returns entries containing provided word either
+ * in description or item name.
+ * 
+ * @author ivano
+ *
+ */
 public class SearchByText implements SearchOperation {
 	
 	@Override

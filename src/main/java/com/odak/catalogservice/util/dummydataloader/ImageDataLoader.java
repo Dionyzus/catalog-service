@@ -14,6 +14,12 @@ public class ImageDataLoader {
 
 	private static final String DATA_SOURCE = "static/images.json";
 	
+	/**
+	 * Loads initial image data.
+	 *
+	 * @param imageRepository - repository handling data.
+	 * @return {@link CommandLineRunner}.
+	 */
 	@Bean
 	public CommandLineRunner loadImageData(ImageRepositoryImpl imageRepository) {
 

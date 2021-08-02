@@ -7,6 +7,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.With;
 
+/**
+ * Instantiates query object with provided configuration.
+ *
+ * @author ivano
+ *
+ */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @With(value = AccessLevel.PRIVATE)
 public class Query implements IQuery {
@@ -48,6 +54,12 @@ public class Query implements IQuery {
 		return this.withQueryConfiguration(queryConfiguration.withSortDirection(sortDirection));
 	}
 
+	/**
+	 * Configuration class containing available query configuration options.
+	 *
+	 * @author ivano
+	 *
+	 */
 	@Data(staticConstructor = "of")
 	@Getter(AccessLevel.NONE)
 	@Setter(AccessLevel.NONE)
@@ -69,6 +81,12 @@ public class Query implements IQuery {
 		@With(AccessLevel.PRIVATE)
 		public final String sortDirection;
 
+		/**
+		 * Configures query options with provided query values, or keeps default values
+		 * if there was no custom value provided.
+		 *
+		 * @return {@link QueryConfiguration} instance.
+		 */
 		public static QueryConfiguration of() {
 			return QueryConfiguration.of("", "", DEFAULT_RECORDS_LIMIT, DEFAULT_PAGE_OFFSET, "", "");
 		}

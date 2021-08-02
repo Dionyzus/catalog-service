@@ -7,12 +7,26 @@ import java.util.stream.Collectors;
 
 import com.odak.catalogservice.model.CatalogItem;
 
+/**
+ * Class containing available sort option implementations.
+ *
+ * @author ivano
+ *
+ */
 public class CatalogItemSorter {
 
 	private CatalogItemSorter() {
 		throw new UnsupportedOperationException("Utils class instantiation not allowed.");
 	}
 
+	/**
+	 * Sorts provided data according to sort direction and comparator instance.
+	 *
+	 * @param catalogItems  - collection on which sort will be performed.
+	 * @param sortDirection - sort direction, ascending or descending.
+	 * @param comparator    - {@link Comparator} instance.
+	 * @return sorted {@link CatalogItem} list.
+	 */
 	public static List<CatalogItem> sort(List<CatalogItem> catalogItems, String sortDirection,
 			Comparator<CatalogItem> comparator) {
 

@@ -16,6 +16,11 @@ public class CategoryService {
 		this.categoryRepository = categoryRepository;
 	}
 
+	/**
+	 * Gets category collection.
+	 *
+	 * @return list containing {@link Category} entries.
+	 */
 	public List<Category> getCategories() {
 		return categoryRepository.getAll();
 	}

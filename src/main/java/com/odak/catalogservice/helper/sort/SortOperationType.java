@@ -1,5 +1,10 @@
 package com.odak.catalogservice.helper.sort;
 
+/**
+ * Available sort field options.
+ * @author ivano
+ *
+ */
 public enum SortOperationType {
 	ID("id"), NAME("name"), PRICE("price");
 

@@ -13,6 +13,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.odak.catalogservice.model.ApiError;
 
+/**
+ * Custom exception handler which handles request exceptions and validation
+ * errors.
+ *
+ * @author ivano
+ *
+ */
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -29,6 +36,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return buildResponseEntity(apiError);
 	}
 
+	/**
+	 * Handles resource not found exception.
+	 *
+	 * @param exception - {@link ResourceNotFoundException} instance.
+	 * @return - {@link ResponseEntity} containing additional error data.
+	 */
 	@ExceptionHandler(ResourceNotFoundException.class)
 	protected ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException exception) {
 		ApiError apiError = new ApiError(HttpStatus.NOT_FOUND);
@@ -36,6 +49,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		return buildResponseEntity(apiError);
 	}
 
+	/**
+	 * Handles resource not found exception.
+	 *
+	 * @param exception - {@link BadRequestException} instance.
+	 * @return - {@link ResponseEntity} containing additional error data.
+	 */
 	@ExceptionHandler(BadRequestException.class)
 	protected ResponseEntity<Object> handleMissingCategoryBadRequest(BadRequestException exception) {
 		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST);

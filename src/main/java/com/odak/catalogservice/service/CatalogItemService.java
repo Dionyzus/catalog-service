@@ -23,6 +23,11 @@ import com.odak.catalogservice.repository.catalogitem.CatalogItemRepositoryImpl;
 import com.odak.catalogservice.repository.category.CategoryRepositoryImpl;
 import com.odak.catalogservice.util.string.StringUtil;
 
+/**
+ * Service handling catalog item REST API calls.
+ * @author ivano
+ *
+ */
 public class CatalogItemService {
 
 	private CatalogItemRepositoryImpl catalogItemRepository;
@@ -41,6 +46,13 @@ public class CatalogItemService {
 		this.categoryRepository = categoryRepository;
 	}
 
+	/**
+	 * Creates new entry in catalog item collection.
+	 *
+	 * @param catalogItem - {@link CatalogItem} instance.
+	 * @return catalog item instance if operation was successful.
+	 * @throws BadRequestException - if operation fails.
+	 */
 	public CatalogItem create(CatalogItem catalogItem) throws BadRequestException {
 
 		Optional<CatalogItem> catalogItemById = catalogItemRepository.getById(catalogItem.getId());
@@ -56,10 +68,23 @@ public class CatalogItemService {
 		return catalogItemRepository.save(catalogItem);
 	}
 
+	/**
+	 * Gets available catalog items.
+	 * 
+	 * @return {@link CatalogItem} list.
+	 */
 	public List<CatalogItem> getCatalogItems() {
 		return catalogItemRepository.getAll();
 	}
 
+	/**
+	 * Gets catalog item matching provided id.
+	 *
+	 * @param itemId - catalog item id.
+	 * @return {link CatalogItem} instance if any matches id.
+	 * 
+	 * @throws ResourceNotFoundException - if no entry with provided id exists.
+	 */
 	public CatalogItem getCatalogItemById(String itemId) throws ResourceNotFoundException {
 		CatalogItem catalogItem = catalogItemRepository.getById(itemId)
 				.orElseThrow(() -> new ResourceNotFoundException(EXCEPTION_MESSAGE + itemId));
@@ -67,6 +92,15 @@ public class CatalogItemService {
 		return catalogItem;
 	}
 
+	/**
+	 * Updates entry matching provided id.
+	 *
+	 * @param itemId - catalog item id.
+	 * @param catalogItemDetails - updated catalog item details.
+	 * @return {@link CatalogItem} instance if operation was successful.
+	 * 
+	 * @throws ResourceNotFoundException - if no entry with provided id exists.
+	 */
 	public CatalogItem update(String itemId, CatalogItem catalogItemDetails) throws ResourceNotFoundException {
 		CatalogItem catalogItem = catalogItemRepository.getById(itemId)
 				.orElseThrow(() -> new ResourceNotFoundException(EXCEPTION_MESSAGE + itemId));
@@ -74,6 +108,13 @@ public class CatalogItemService {
 		return catalogItemRepository.update(catalogItem, catalogItemDetails);
 	}
 
+	/**
+	 * Deletes catalog item entry if it matches provided id.
+	 *
+	 * @param itemId - {@link CatalogItem} id.
+	 *
+	 * @throws ResourceNotFoundException - if no entry with provided id exists.
+	 */
 	public void delete(String itemId) throws ResourceNotFoundException {
 		catalogItemRepository.getById(itemId)
 				.orElseThrow(() -> new ResourceNotFoundException(EXCEPTION_MESSAGE + itemId));
@@ -81,6 +122,14 @@ public class CatalogItemService {
 		catalogItemRepository.delete(itemId);
 	}
 
+	/**
+	 * Page containing catalog item collection. Gets all entries if no query parameters are provided,
+	 * otherwise displays filtered data according to parameters.
+	 * 
+	 * @param queryParams - map containing provided query parameters.
+	 * @return JSON containing available entries and page information.
+	 * @throws BadRequestException - if query operation contains errors.
+	 */
 	public Page<CatalogItem> query(HashMap<String, String> queryParams) throws BadRequestException {
 
 		if (queryParams.isEmpty()) {
@@ -117,6 +166,16 @@ public class CatalogItemService {
 		}
 	}
 
+	/**
+	 * Creates page containing collection entries.
+	 *
+	 * @param catalogItems - list containing {@link CatalogItem}.
+	 * @param queryConfiguration - {@link QueryConfiguration} created from query parameters.
+	 *
+	 * @return new Page instance containing entries according to query parameters.
+	 *
+	 * @throws BadRequestException if query contains errors.
+	 */
 	Page<CatalogItem> toPage(List<CatalogItem> catalogItems, QueryConfiguration queryConfiguration)
 			throws BadRequestException {
 

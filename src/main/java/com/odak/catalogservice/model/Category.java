@@ -6,6 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Category data representation object.
+ * @author ivano
+ *
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -6,6 +6,12 @@ import java.util.stream.Collectors;
 
 import com.odak.catalogservice.model.CatalogItem;
 
+/**
+ * Performs query by name field, returns only values matching provided word.
+ *
+ * @author ivano
+ *
+ */
 public class SearchByName implements SearchOperation{
 
 	@Override

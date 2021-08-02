@@ -16,6 +16,12 @@ public class CategoryDataLoader {
 
 	private static final String DATA_SOURCE = "static/categories.json";
 
+	/**
+	 * Loads initial category data.
+	 *
+	 * @param categoryRepository - repository handling data.
+	 * @return {@link CommandLineRunner}.
+	 */
 	@Bean
 	public CommandLineRunner loadCategoryData(CategoryRepositoryImpl categoryRepository) {
 

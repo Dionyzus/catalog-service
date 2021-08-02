@@ -1,5 +1,10 @@
 package com.odak.catalogservice.helper.search;
 
+/**
+ * Available search operation types.
+ * @author ivano
+ *
+ */
 public enum SearchOperationType {
 	NAME("name"), TEXT("text"), CATEGORY("category");
 

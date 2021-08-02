@@ -16,6 +16,12 @@ public class CatalogItemDataLoader {
 
 	private static final String DATA_SOURCE = "static/catalog_items.json";
 	
+	/**
+	 * Loads initial catalog item data.
+	 *
+	 * @param catalogItemRepository - repository handling data.
+	 * @return {@link CommandLineRunner}.
+	 */
 	@Bean
 	public CommandLineRunner loadCatalogItemData(CatalogItemRepositoryImpl catalogItemRepository) {
 
